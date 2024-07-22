@@ -1,0 +1,80 @@
+openapi: 3.0.0
+info:
+  title: Social Media API
+  version: 1.0.0
+  description: API for managing likes in a social media application
+servers:
+  - url: https://api.socialmedia.com/v1
+paths:
+  /posts/{post_id}/likes:
+    get:
+      summary: Retrieve a list of likes for a specific post
+      parameters:
+        - name: post_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of likes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Like'
+    post:
+      summary: Like a post
+      parameters:
+        - name: post_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Like'
+      responses:
+        '201':
+          description: Post liked successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Like'
+    delete:
+      summary: Unlike a post
+      parameters:
+        - name: post_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Like'
+      responses:
+        '204':
+          description: Post unliked successfully
+
+components:
+  schemas:
+    Like:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          example: 1
+        post_id:
+          type: integer
+          example: 1
+        liked_at:
+          type: string
+          format: date-time
+          example: "2023-07-21T15:30:00Z"

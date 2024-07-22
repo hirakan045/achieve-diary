@@ -1,0 +1,106 @@
+openapi: 3.0.0
+info:
+  title: Social Media API
+  version: 1.0.0
+  description: API for managing follow relationships in a social media application
+servers:
+  - url: https://api.socialmedia.com/v1
+paths:
+  /users/{user_id}/followers:
+    get:
+      summary: Retrieve a list of followers for a specific user
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of followers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Follow'
+  /users/{user_id}/following:
+    get:
+      summary: Retrieve a list of users a specific user is following
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of users being followed
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Follow'
+  /users/{user_id}/follow:
+    post:
+      summary: Follow a user
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FollowRequest'
+      responses:
+        '201':
+          description: User followed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Follow'
+    delete:
+      summary: Unfollow a user
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FollowRequest'
+      responses:
+        '204':
+          description: User unfollowed successfully
+
+components:
+  schemas:
+    Follow:
+      type: object
+      properties:
+        follower_id:
+          type: integer
+          example: 1
+        following_id:
+          type: integer
+          example: 2
+        followed_at:
+          type: string
+          format: date-time
+          example: "2023-07-21T15:30:00Z"
+
+    FollowRequest:
+      type: object
+      properties:
+        following_id:
+          type: integer
+          example: 2

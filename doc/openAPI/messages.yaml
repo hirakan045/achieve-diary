@@ -1,0 +1,140 @@
+openapi: 3.0.1
+info:
+  title: Social Media API
+  description: API for managing a social media platform.
+  version: 1.0.0
+
+servers:
+  - url: https://api.example.com/v1
+
+paths:
+  /messages:
+    get:
+      summary: Get all messages
+      tags:
+        - Messages
+      responses:
+        '200':
+          description: A list of messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+
+    post:
+      summary: Create a new message
+      tags:
+        - Messages
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageInput'
+      responses:
+        '201':
+          description: Message created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+
+  /messages/{id}:
+    get:
+      summary: Get a message by ID
+      tags:
+        - Messages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '404':
+          description: Message not found
+
+    put:
+      summary: Update a message by ID
+      tags:
+        - Messages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageInput'
+      responses:
+        '200':
+          description: Message updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '404':
+          description: Message not found
+
+    delete:
+      summary: Delete a message by ID
+      tags:
+        - Messages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Message deleted successfully
+        '404':
+          description: Message not found
+
+components:
+  schemas:
+    Message:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        sender_id:
+          type: integer
+          example: 123
+        receiver_id:
+          type: integer
+          example: 456
+        content:
+          type: string
+          example: "Hello, this is a message."
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-07-20T00:00:00Z"
+
+    MessageInput:
+      type: object
+      properties:
+        sender_id:
+          type: integer
+          example: 123
+        receiver_id:
+          type: integer
+          example: 456
+        content:
+          type: string
+          example: "Hello, this is a message."
